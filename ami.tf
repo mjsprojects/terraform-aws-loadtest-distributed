@@ -8,7 +8,7 @@ data "aws_ami" "debian" {
   
     filter {
         name   = "name"
-        values = ["Debian 11*"]
+        values = ["debian-11*"]
     }
 
     filter {
