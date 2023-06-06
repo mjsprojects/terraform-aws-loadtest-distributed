@@ -133,7 +133,7 @@ variable "nodes_monitoring" {
 variable "ssh_user" {
   description = "SSH user for the leader"
   type        = string
-  default     = "ec2-user"
+  default     = "admin"
 }
 
 variable "ssh_cidr_ingress_blocks" {
