@@ -1,16 +1,19 @@
 #!/bin/bash
 
-sudo yum update -y
-sudo yum install -y pcre2-devel.x86_64 python gcc python3-devel tzdata curl unzip bash java-11-amazon-corretto htop k6
+sudo apt-get update
+sudo DEBIAN_FRONTEND=noninteractive apt-get -y install gnupg2 apt-transport-https
+sudo DEBIAN_FRONTEND=noninteractive apt-get -y upgrade
+
+sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
+
+sudo apt-get update && sudo DEBIAN_FRONTEND=noninteractive apt-get -y install build-essential git libssl-dev libffi-dev python3 python3-dev python3-pip python3-setuptools python3-wheel python3-virtualenv openjdk-11-jdk-headless default-jdk-headless curl unzip k6
 
 # TAURUS
-export BZT_VERSION="1.16.0"
-sudo pip3 install bzt==$BZT_VERSION
+sudo pip3 install bzt
 
 # LOCUST
-export LOCUST_VERSION="2.9.0"
-sudo pip3 install locust==$LOCUST_VERSION
-
+sudo pip3 install locust
 
 # JMETER
 export MIRROR_HOST=https://archive.apache.org/dist/jmeter

@@ -1,11 +1,11 @@
 #!/bin/bash
 
-sudo yum update -y
-sudo yum install -y pcre2-devel.x86_64 python gcc python3-devel tzdata curl unzip bash htop
+sudo apt-get update
+sudo DEBIAN_FRONTEND=noninteractive apt-get -y upgrade
+sudo DEBIAN_FRONTEND=noninteractive apt-get -y install build-essential git libssl-dev libffi-dev python3 python3-dev python3-pip python3-setuptools python3-wheel python3-virtualenv curl unzip
 
 # LOCUST
-export LOCUST_VERSION="2.9.0"
-sudo pip3 install locust==$LOCUST_VERSION
+sudo pip3 install locust
 
 export PRIVATE_IP=$(hostname -I | awk '{print $1}')
 echo "PRIVATE_IP=$PRIVATE_IP" >> /etc/environment

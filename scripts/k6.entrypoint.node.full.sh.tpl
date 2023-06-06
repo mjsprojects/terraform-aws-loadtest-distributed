@@ -1,19 +1,17 @@
 #!/bin/bash
 
-sudo yum update -y
-sudo yum install -y pcre2-devel.x86_64 python gcc python3-devel tzdata curl unzip bash java-11-amazon-corretto htop k6
+sudo apt-get update
+sudo DEBIAN_FRONTEND=noninteractive apt-get -y install gnupg2 apt-transport-https
+sudo DEBIAN_FRONTEND=noninteractive apt-get -y upgrade
 
-#ELK
-sudo rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch
+sudo gpg --no-default-keyring --keyring /usr/share/keyrings/k6-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys C5AD17C747E3415A3642D57D77C6C491D6AC1D69
+echo "deb [signed-by=/usr/share/keyrings/k6-archive-keyring.gpg] https://dl.k6.io/deb stable main" | sudo tee /etc/apt/sources.list.d/k6.list
 
-# INSTALL FILEBEAT
-wget -q https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-oss-7.1.0-x86_64.rpm
-sudo rpm -ivh filebeat-oss-7.1.0-x86_64.rpm
+sudo apt-get update && sudo DEBIAN_FRONTEND=noninteractive apt-get -y install build-essential git libssl-dev libffi-dev python3 python3-dev python3-pip python3-setuptools python3-wheel python3-virtualenv openjdk-11-jdk-headless default-jdk-headless curl unzip k6
 
-# INSTALL LOGSTASH
-wget -q https://artifacts.elastic.co/downloads/logstash/logstash-oss-7.1.0.rpm
-sudo rpm -ivh logstash-oss-7.1.0.rpm
-
+wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo gpg --dearmor -o /usr/share/keyrings/elastic-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/elastic-keyring.gpg] https://artifacts.elastic.co/packages/8.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-8.x.list
+sudo apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y install logstash filebeat
 
 export PRIVATE_IP=$(hostname -I | awk '{print $1}')
 echo "PRIVATE_IP=$PRIVATE_IP" >> /etc/environment
